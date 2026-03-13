@@ -135,12 +135,28 @@ if __name__ == "__main__":
 
     synthetic_data = generate_dataset(**hyp_parms)
     
-    # Dynamic filename based on parameters
-    filename = f"synthetic_typos_{hyp_parms['text_field']}_er{hyp_parms['error_rate']}.csv"
+
+
+# Dynamic filename based on parameters
+    filename = f"synthetic_word_substitutions.csv"
     
-    # Save the output to a CSV
-    synthetic_data.to_csv(filename, index=False)
+    # 1. Define your metadata block
+    metadata = [
+        "# METADATA",
+        "# Dataset: AG News Title Substitutions",
+        "# Perturbation Type: Subword / Word Level",
+        f"# Hyper params: {hyp_parms}"
+    ]
     
-    pd.set_option('display.max_colwidth', None)
+    # 2. Write the metadata to the file first
+    with open("datasets/"+filename, 'w') as f:
+        for line in metadata:
+            f.write(line + '\n')
+            
+    # 3. Append the pandas dataframe to the same file
+    # mode='a' means "append", so it doesn't overwrite your metadata!
+    synthetic_data.to_csv("datasets/"+filename, mode='a', index=False)
+
+    
     print(f"\nSaved to {filename}. Preview of Generated Data:")
-    print(synthetic_data[10:15])
+  

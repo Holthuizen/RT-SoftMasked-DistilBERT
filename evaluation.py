@@ -18,7 +18,8 @@ correction_model.eval()
 tokenizer = correction_model.tokenizer
 
 #LOAD TRAINING DATA: from CSV into pandas dataframe
-df = pd.read_csv("datasets/synthetic_typos_title_er0.15.csv")
+dataset = "datasets/synthetic_typos_title_er0.15.csv"
+df = pd.read_csv(dataset, comment="#")
 
 #run the RWEC pipeline and store the results in the dataframes under "predictions"
 
@@ -39,6 +40,14 @@ for i in tqdm(range(0, len(T), batch_size), desc="Predicting"):
     all_predictions.extend(text_predictions)
     
 df["predictions"] = all_predictions
+
+
+
+# Force all columns to be strings and replace NaNs with empty strings
+df["Y_target"] = df["Y_target"].fillna("").astype(str)
+df["predictions"] = df["predictions"].fillna("").astype(str)
+df["X_perturbed"] = df["X_perturbed"].fillna("").astype(str)
+
 
 #METRICS: ASR style word based edit distance evaluation 
 import jiwer
@@ -69,4 +78,28 @@ wer_baseline = jiwer.wer(
 
 print(f"Baseline WER: {wer_baseline} and model WER: {wer_score}")
 pd.set_option('display.max_colwidth', None)
-print(df.head(20))
+print(df.head(50))
+
+
+
+output_file = "model_predictions.csv"
+
+metadata_lines = []
+with open(dataset, 'r', encoding='utf-8') as f:
+    for line in f:
+        if line.startswith("#"):
+            metadata_lines.append(line)
+        else:
+            # As soon as we hit a line without a '#', we know the data started, so we stop reading.
+            break
+
+
+metadata_lines.append("# Model Architecture: Bi-GRU + Soft-Masked DistilBERT\n")
+metadata_lines.append(f"# Baseline WER: {wer_baseline:.4f}\n")
+metadata_lines.append(f"# Model WER: {wer_score:.4f}\n")
+
+# 3. Write the assembled metadata to the new output file
+with open(output_file, 'w', encoding='utf-8') as f:
+    f.writelines(metadata_lines)
+
+df.to_csv(output_file, mode='a', index=False)
