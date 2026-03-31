@@ -5,6 +5,7 @@ import random
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 from typing import Tuple, List
+import numpy as np
 
 import pandas as pd
 from datasets import load_dataset
@@ -14,8 +15,9 @@ import pkg_resources
 import html
 
 
-
-hyp_parms = {"text_field": "title", "error_rate": 0.15,"homophone_ratio":0.8, "max_rows": 125000}
+#text_field options: title, description
+#sample dist same as Zhang at el (2020)
+hyp_parms = {"text_field": "description", "error_rate": 0.15,"homophone_ratio":0.8, "max_rows": 125000}
 
 
 # ==========================================
@@ -23,7 +25,6 @@ hyp_parms = {"text_field": "title", "error_rate": 0.15,"homophone_ratio":0.8, "m
 # ==========================================
 worker_sym_spell = None
 worker_vocab = None
-
 
 
 def init_worker():
@@ -51,7 +52,7 @@ def perturb_text(args: Tuple[str, float, float]) -> Tuple[str, str, List[int]]:
     tokens = re.split(r'(\W+)', text)
     
     # Initialize a mask of all 0s, perfectly aligned with the tokens list
-    mask = [0] * len(tokens)
+    mask = np.zeros(len(tokens))
     
     # Find indices of valid words (alphabetic and length > 1)
     word_indices = [i for i, token in enumerate(tokens) if token.isalpha() and len(token) > 1]

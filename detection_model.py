@@ -2,9 +2,6 @@ import torch.nn as nn
 from transformers import DistilBertModel
 
 #Bi-GRU detection model inspired by work from Zhang at el Spelling Error Correction with Soft-Masked BERT
-
-
-#move this to its own file
 class BiGRUDetectionNetwork(nn.Module):
     def __init__(self, model_name='distilbert-base-uncased', hidden_dim=256):
         super().__init__()
