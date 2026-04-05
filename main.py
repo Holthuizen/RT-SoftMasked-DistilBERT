@@ -1,3 +1,5 @@
+#RWEC pipeline
+
 import torch
 from correction_model import SoftMaskDistilBert
 from detection_model import BiGRUDetectionNetwork
@@ -42,7 +44,8 @@ def soft_mask_encoding_decoding_pipeline(X, detection_model, correction_model, t
     return decoded_texts
 
 
-# --- Let's test the entire architecture! ---
+
+#examples
 test_sentences = [
     "loop up that word in the dictionary",
     "Sony will flay EU debut of PlayStation 3",
