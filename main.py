@@ -1,7 +1,9 @@
 #RWEC pipeline
 
 import torch
-from correction_model import SoftMaskDistilBert
+
+#from correction_model import SoftMaskDistilBert
+from correction_model_residual import SoftMaskDistilBert
 from detection_model import BiGRUDetectionNetwork
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

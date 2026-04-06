@@ -21,3 +21,4 @@ todo
 [] evaluation incorporate scribendi_score and gleu
 [] evaluate base model 
 [] use residual model as correction model 
+[] 
