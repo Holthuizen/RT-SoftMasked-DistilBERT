@@ -4,7 +4,7 @@ from tqdm import tqdm
 import pandas as pd
 from RWEC import soft_mask_encoding_decoding_pipeline
 from correction_model import SoftMaskDistilBert
-from detection_model import BiGRUDetectionNetwork
+from end_to_end_training.BiGRUDetectionNetwork import BiGRUDetectionNetwork
 
 #SETUP: models, device and tokenizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
