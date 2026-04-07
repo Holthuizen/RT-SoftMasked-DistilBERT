@@ -10,3 +10,15 @@
 
 3) correction_model: defines custom BERT MODEl
 
+
+
+todo
+
+[] switch data to descriptions
+[] expand model definition
+[] add residual 
+[] debugging and logging
+[] evaluation incorporate scribendi_score and gleu
+[] evaluate base model 
+[] use residual model as correction model 
+[] 
